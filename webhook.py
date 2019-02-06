@@ -9,23 +9,12 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-
-@app.route('/test', methods=['GET'])
-def test():
-    r = {
-        "status": 200,
-        "displayText": "I am reachable",
-        "source": "Test API"
-    }
-    r.headers['Content-Type'] = 'application/json'
-    return r
-
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
     print(json.dumps(req, indent=4))
     
-    res = processRequest(req)
+    res = makeResponse(req)
     
     res = json.dumps(res, indent=4)
     # print(res)
@@ -38,8 +27,6 @@ def makeResponse(req):
     parameters = result.get("parameters")
     city = parameters.get("geo-city")
     date = parameters.get("date")
-    if city is None:
-        return None
     r=requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=b3c31d1f1068b0c789227c8bdb5c9ba0')
     json_object = r.json()
     weather=json_object['list']
@@ -47,7 +34,7 @@ def makeResponse(req):
         if date in weather[i]['dt_txt']:
             condition= weather[i]['weather'][0]['description']
             break
-    speech = "The forecast for "+city+ " for "+date+" is "+condition
+    speech = "The forecast for " + city + " for " + date + " is " + condition
     return {
     "speech": speech,
     "displayText": speech,
