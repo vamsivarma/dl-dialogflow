@@ -41,9 +41,9 @@ def makeResponse(req):
             break
     speech = "The forecast for " + city + " for " + date + " is " + condition
     return {
-    "speech": speech,
-    "displayText": speech,
-    "source": "apiai-weather-webhook"
+    "fulfillmentText": speech,
+    "fulfillmentMessages": [],
+    "source": "dl-dialogflow-webhook"
     }
 
 if __name__ == '__main__':
