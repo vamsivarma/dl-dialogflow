@@ -23,8 +23,6 @@ def webhook():
     return r
 
 def makeResponse(req):
-    if req.get("result").get("action") != "fetchWeatherForecast":
-        return {}
     result = req.get("result")
     parameters = result.get("parameters")
     city = parameters.get("geo-city")
@@ -38,7 +36,7 @@ def makeResponse(req):
         if date in weather[i]['dt_txt']:
             condition= weather[i]['weather'][0]['description']
             break
-    speech = "The forecast for"+city+ "for "+date+" is "+condition
+    speech = "The forecast for "+city+ " for "+date+" is "+condition
     return {
     "speech": speech,
     "displayText": speech,
